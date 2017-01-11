@@ -1,3 +1,21 @@
 <resources>
     <string name="app_name">Treinamento_Android</string>
+    <string name="gitHub_status_header">Server status:</string>
+
+    <string name="txt_username">Username</string>
+    <string name="txt_password">Password</string>
+
+    <string name="txt_login">Login</string>
+    <string name="txt_login_oAuth">Login OAuth</string>
+    <string name="txt_required">Required Field</string>
+
+    <!-- SharedPreference Keys -->
+    <string name="sp_file">app.iago.treinamento_android.FILE_PREFERENCES</string>
+    <string name="sp_credential_key">CREDENTIAL_KEY</string>
+
+    <!-- oAuth strings -->
+    <string name="oauth_client_id">7ec9af9f6a5324503377</string>
+    <string name="oauth_client_secret">0b735db103db94840b7017e5b5d007af744298bd</string>
+    <string name="oauth_host">www.google.com.br/</string>
+    <string name="oauth_schema">https</string>
 </resources>
