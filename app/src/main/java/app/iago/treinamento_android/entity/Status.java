@@ -17,20 +17,27 @@ public class Status {
 
     public enum Type {
         @SerializedName("good")
-        GOOD(R.color.green),
+        GOOD(R.color.green, R.string.status_good),
         @SerializedName("minor")
-        MINOR(R.color.orange),
+        MINOR(R.color.orange, R.string.status_minor),
         @SerializedName("major")
-        MAJOR(R.color.red);
+        MAJOR(R.color.red, R.string.status_major);
 
         private int colorRes;
+        private int status;
 
-        Type(int colorRes) {
+        Type(int colorRes, int status) {
             this.colorRes = colorRes;
+            this.status = status;
         }
 
         public int getColorRes() {
             return colorRes;
         }
+
+        public int getStatus() {
+            return status;
+        }
+
     }
 }

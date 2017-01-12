@@ -18,4 +18,7 @@
     <string name="oauth_client_secret">0b735db103db94840b7017e5b5d007af744298bd</string>
     <string name="oauth_host">www.google.com.br/</string>
     <string name="oauth_schema">https</string>
+    <string name="status_good">GOOD</string>
+    <string name="status_minor">MINOR</string>
+    <string name="status_major">MAJOR</string>
 </resources>
