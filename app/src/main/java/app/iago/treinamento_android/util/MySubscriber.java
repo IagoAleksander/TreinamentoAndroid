@@ -8,14 +8,12 @@ import rx.Subscriber;
  * Created by IagoA on 12/01/2017.
  */
 
-public abstract class MySubscriber extends Subscriber {
+public abstract class MySubscriber<T> extends Subscriber<T> {
 
     private static final String TAG = MySubscriber.class.getSimpleName();
 
     @Override
-    public void onCompleted() {
-
-    }
+    public void onCompleted() {}
 
     @Override
     public void onError(Throwable e) {
@@ -25,8 +23,4 @@ public abstract class MySubscriber extends Subscriber {
 
     public abstract void onError(String message);
 
-    @Override
-    public void onNext(Object o) {
-
-    }
 }

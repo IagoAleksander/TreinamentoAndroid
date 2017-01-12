@@ -10,10 +10,13 @@ import android.support.design.widget.TextInputEditText;
 import android.support.design.widget.TextInputLayout;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+
+import com.jakewharton.rxbinding.widget.RxTextView;
+
+import java.util.concurrent.TimeUnit;
 
 import app.iago.treinamento_android.entity.AccessToken;
 import app.iago.treinamento_android.entity.GitHubStatusApi;
@@ -21,15 +24,16 @@ import app.iago.treinamento_android.entity.GitHubUserApi;
 import app.iago.treinamento_android.entity.Status;
 import app.iago.treinamento_android.entity.User;
 import app.iago.treinamento_android.util.AppUtils;
+import app.iago.treinamento_android.util.MySubscriber;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import okhttp3.Credentials;
-import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
 import static app.iago.treinamento_android.entity.GitHubStatusApi.RETROFIT;
+import static com.jakewharton.rxbinding.widget.RxTextView.textChanges;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -80,15 +84,8 @@ public class MainActivity extends AppCompatActivity {
         statusApiImpl.lastMessage()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Subscriber<Status>() {
-                    @Override
-                    public void onCompleted() {
-
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-                        Log.d(TAG, e.getMessage(), e.fillInStackTrace());
+                .subscribe(new MySubscriber<Status>() {
+                    public void onError(String message) {
                         statusView.setText(Status.Type.MAJOR.getStatus());
                         changeBackgroundColor(Status.Type.MAJOR.getColorRes());
                     }
@@ -99,6 +96,7 @@ public class MainActivity extends AppCompatActivity {
                         changeBackgroundColor(Status.Type.GOOD.getColorRes());
                     }
                 });
+
 
         oAuthlLoginButton.setOnClickListener(view -> {
             final String baseUrl = AccessToken.GitHubOAuthApi.BASE_URL + "authorize";
@@ -121,14 +119,9 @@ public class MainActivity extends AppCompatActivity {
             mGitHubUserApi.basicAuth(credential)
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(new Subscriber<User>() {
+                    .subscribe(new MySubscriber<User>() {
                         @Override
-                        public void onCompleted() {
-
-                        }
-
-                        @Override
-                        public void onError(Throwable e) {
+                        public void onError(String message) {
 
                         }
 
@@ -144,6 +137,20 @@ public class MainActivity extends AppCompatActivity {
         }
 
         mSharedPrefs =  getSharedPreferences(getString(R.string.sp_file), MODE_PRIVATE);
+        textChanges(usernameLayout.getEditText())
+                .debounce(2, TimeUnit.SECONDS, AndroidSchedulers.mainThread())
+                .skip(1)
+                .subscribe(text -> {
+                    AppUtils.validateRequiredFields(this, usernameLayout);
+                });
+//        Subscription subscribe = RxTextView.textChanges(passwordLayout.getEditText())
+        RxTextView.textChanges(passwordLayout.getEditText())
+                .debounce(2, TimeUnit.SECONDS, AndroidSchedulers.mainThread())
+                .skip(1)
+                .subscribe(text -> {
+                    AppUtils.validateRequiredFields(this, passwordLayout);
+                });
+//        subscribe.unsubscribe();
     }
 
     private void changeBackgroundColor(int colorRes) {
@@ -165,14 +172,9 @@ public class MainActivity extends AppCompatActivity {
                 mGitHubOAuthApi.accessToken(clientId, clientSecret, code)
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
-                        .subscribe(new Subscriber<AccessToken> () {
-
+                        .subscribe(new MySubscriber<AccessToken>() {
                             @Override
-                            public void onCompleted() {
-                            }
-
-                            @Override
-                            public void onError(Throwable e) {
+                            public void onError(String message) {
 
                             }
 
@@ -197,19 +199,14 @@ public class MainActivity extends AppCompatActivity {
         mGitHubStatusApi.lastMessage()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Subscriber<Status>() {
+                .subscribe(new MySubscriber<Status>() {
                     @Override
-                    public void onCompleted() {
-
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
+                    public void onError(String message) {
                         changeBackgroundColor(Status.Type.MAJOR.getColorRes());
                     }
 
                     @Override
-                    public void onNext(Status status2) {
+                    public void onNext(Status status) {
                         statusView.setText("GOOD");
                         changeBackgroundColor(Status.Type.GOOD.getColorRes());
                     }
