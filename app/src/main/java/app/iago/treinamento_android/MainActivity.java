@@ -9,7 +9,6 @@ import android.support.design.widget.Snackbar;
 import android.support.design.widget.TextInputEditText;
 import android.support.design.widget.TextInputLayout;
 import android.support.v4.content.ContextCompat;
-import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -17,6 +16,8 @@ import android.widget.TextView;
 import com.jakewharton.rxbinding.widget.RxTextView;
 
 import java.util.concurrent.TimeUnit;
+
+import javax.inject.Inject;
 
 import app.iago.treinamento_android.entity.AccessToken;
 import app.iago.treinamento_android.entity.GitHubStatusApi;
@@ -32,10 +33,11 @@ import okhttp3.Credentials;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
-import static app.iago.treinamento_android.entity.GitHubStatusApi.RETROFIT;
 import static com.jakewharton.rxbinding.widget.RxTextView.textChanges;
 
-public class MainActivity extends AppCompatActivity {
+//import static app.iago.treinamento_android.entity.GitHubStatusApi.RETROFIT;
+
+public class MainActivity extends BaseActivity {
 
     private static final String TAG = MainActivity.class.getSimpleName();
 
@@ -60,10 +62,16 @@ public class MainActivity extends AppCompatActivity {
     @BindView(R.id.login_button_oAuth)
     Button oAuthlLoginButton;
 
+    @Inject
     GitHubStatusApi mGitHubStatusApi;
+    @Inject
     GitHubUserApi mGitHubUserApi;
+    @Inject
     AccessToken.GitHubOAuthApi mGitHubOAuthApi;
-    private SharedPreferences mSharedPrefs;
+
+    @Inject
+//    @Named("secret")
+    SharedPreferences mSharedPrefs;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,9 +79,10 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         ButterKnife.bind(this);
+        super.getDaggerDiComponent().inject(this);
 
-        GitHubStatusApi statusApiImpl = RETROFIT.create(GitHubStatusApi.class);
-        mGitHubStatusApi = statusApiImpl;
+//        GitHubStatusApi statusApiImpl = RETROFIT.create(GitHubStatusApi.class);
+//        mGitHubStatusApi = statusApiImpl;
 
         final GitHubUserApi userApiImpl = GitHubUserApi.RETROFIT.create(GitHubUserApi.class);
         mGitHubUserApi = userApiImpl;
@@ -81,21 +90,21 @@ public class MainActivity extends AppCompatActivity {
         final AccessToken.GitHubOAuthApi oAuthApiImpl = AccessToken.GitHubOAuthApi.RETROFIT.create(AccessToken.GitHubOAuthApi.class);
         mGitHubOAuthApi = oAuthApiImpl;
 
-        statusApiImpl.lastMessage()
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new MySubscriber<Status>() {
-                    public void onError(String message) {
-                        statusView.setText(Status.Type.MAJOR.getStatus());
-                        changeBackgroundColor(Status.Type.MAJOR.getColorRes());
-                    }
-
-                    @Override
-                    public void onNext(Status status) {
-                        statusView.setText(status.status.getStatus());
-                        changeBackgroundColor(Status.Type.GOOD.getColorRes());
-                    }
-                });
+//        statusApiImpl.lastMessage()
+//                .subscribeOn(Schedulers.io())
+//                .observeOn(AndroidSchedulers.mainThread())
+//                .subscribe(new MySubscriber<Status>() {
+//                    public void onError(String message) {
+//                        statusView.setText(Status.Type.MAJOR.getStatus());
+//                        changeBackgroundColor(Status.Type.MAJOR.getColorRes());
+//                    }
+//
+//                    @Override
+//                    public void onNext(Status status) {
+//                        statusView.setText(status.status.getStatus());
+//                        changeBackgroundColor(Status.Type.GOOD.getColorRes());
+//                    }
+//                });
 
 
         oAuthlLoginButton.setOnClickListener(view -> {
