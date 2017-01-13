@@ -2,11 +2,12 @@ package app.iago.treinamento_android.dagger;
 
 import javax.inject.Singleton;
 
-import app.iago.treinamento_android.MainActivity;
 import app.iago.treinamento_android.dagger.module.ApplicationModule;
-import app.iago.treinamento_android.dagger.module.NetworkModule;
 import app.iago.treinamento_android.dagger.module.PreferenceModule;
-import app.iago.treinamento_android.dagger.module.ServiceModule;
+import app.iago.treinamento_android.dagger.module.infraestructure.ManagerModule;
+import app.iago.treinamento_android.dagger.module.infraestructure.NetworkModule;
+import app.iago.treinamento_android.dagger.module.infraestructure.ServiceModule;
+import app.iago.treinamento_android.dagger.module.presentation.HelperModule;
 import dagger.Component;
 
 /**
@@ -16,10 +17,12 @@ import dagger.Component;
 @Singleton
 @Component(modules = {
         ApplicationModule.class,
+        HelperModule.class,
         PreferenceModule.class,
         NetworkModule.class,
-        ServiceModule.class
+        ServiceModule.class,
+        ManagerModule.class
 })
 public interface DiComponent {
-    void inject(MainActivity activity);
+    UiComponent uiComponent();
 }

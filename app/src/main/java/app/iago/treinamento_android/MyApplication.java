@@ -4,6 +4,7 @@ import android.app.Application;
 
 import app.iago.treinamento_android.dagger.DaggerDiComponent;
 import app.iago.treinamento_android.dagger.DiComponent;
+import app.iago.treinamento_android.dagger.UiComponent;
 import app.iago.treinamento_android.dagger.module.ApplicationModule;
 
 /**
@@ -22,7 +23,7 @@ public class MyApplication extends Application {
                 .build();
     }
 
-    public DiComponent getDaggerDiComponent() {
-        return mDiComponent;
+    public UiComponent getDaggerUiComponent() {
+        return mDiComponent.uiComponent();
     }
 }

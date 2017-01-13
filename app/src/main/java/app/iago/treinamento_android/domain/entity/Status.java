@@ -1,4 +1,4 @@
-package app.iago.treinamento_android.entity;
+package app.iago.treinamento_android.domain.entity;
 
 import com.google.gson.annotations.SerializedName;
 

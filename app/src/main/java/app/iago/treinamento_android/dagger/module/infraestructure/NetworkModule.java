@@ -1,4 +1,4 @@
-package app.iago.treinamento_android.dagger.module;
+package app.iago.treinamento_android.dagger.module.infraestructure;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -6,9 +6,9 @@ import com.google.gson.GsonBuilder;
 import javax.inject.Named;
 import javax.inject.Singleton;
 
-import app.iago.treinamento_android.entity.AccessToken;
-import app.iago.treinamento_android.entity.GitHubStatusApi;
-import app.iago.treinamento_android.entity.GitHubUserApi;
+import app.iago.treinamento_android.infraestructure.storage.service.GitHubOAuthService;
+import app.iago.treinamento_android.infraestructure.storage.service.GitHubStatusService;
+import app.iago.treinamento_android.infraestructure.storage.service.GitHubUserService;
 import dagger.Module;
 import dagger.Provides;
 import retrofit2.Retrofit;
@@ -48,7 +48,7 @@ public class NetworkModule {
   Retrofit providesRetrofitGitHub(GsonConverterFactory gsonFactory,
                                   RxJavaCallAdapterFactory rxFactory) {
       return buildRetrofit(gsonFactory, rxFactory,
-              GitHubUserApi.BASE_URL);
+              GitHubUserService.BASE_URL);
   }
 
   @Provides
@@ -57,7 +57,7 @@ public class NetworkModule {
   Retrofit providesRetrofitGitHubStatus(GsonConverterFactory gsonFactory,
                                         RxJavaCallAdapterFactory rxFactory) {
       return buildRetrofit(gsonFactory, rxFactory,
-              GitHubStatusApi.BASE_URL);
+              GitHubStatusService.BASE_URL);
   }
 
   @Provides
@@ -66,7 +66,7 @@ public class NetworkModule {
   Retrofit providesRetrofitGitHubOAuth(GsonConverterFactory gsonFactory,
                                        RxJavaCallAdapterFactory rxFactory) {
       return buildRetrofit(gsonFactory, rxFactory,
-              AccessToken.GitHubOAuthApi.BASE_URL);
+              GitHubOAuthService.BASE_URL);
   }
 
   private Retrofit buildRetrofit(GsonConverterFactory converterFactory,
